@@ -1,0 +1,47 @@
+@import url("https://fonts.googleapis.com/css2?family=Roboto:wght@100;300;400;500;700&display=swap");
+
+@tailwind base;
+@tailwind components;
+@tailwind utilities;
+
+/* simple spinner animation */
+.spin {
+  width: 25px;
+  height: 25px;
+  border: 3px solid rgba(255, 255, 255, 0.3);
+  border-radius: 50%;
+  border-top-color: #fff;
+  animation: spin 1s linear infinite;
+  -webkit-animation: spin 1s linear infinite;
+}
+
+@keyframes spin {
+  to {
+    -webkit-transform: rotate(360deg);
+  }
+}
+@-webkit-keyframes spin {
+  to {
+    -webkit-transform: rotate(360deg);
+  }
+}
+
+.scroll-element {
+  scrollbar-color: #d9d9d9 black;
+  scrollbar-width: thin;
+}
+
+/* Styling the scrollbar in Chrome and Safari */
+.scroll-element::-webkit-scrollbar {
+  width: 6px;
+  height: 6px;
+}
+
+.scroll-element::-webkit-scrollbar-thumb {
+  background-color: #d9d9d9; /* Set thumb color for Chrome and Safari */
+  border-radius: 6px;
+}
+
+.scroll-element::-webkit-scrollbar-track {
+  background-color: black; /* Set track color for Chrome and Safari */
+}
