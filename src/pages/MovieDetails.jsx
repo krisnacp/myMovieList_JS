@@ -153,7 +153,8 @@ function MovieDetails() {
             recommMovies.map((nowPlayingMovie) => {
               const { id, title, release_date, poster_path } = nowPlayingMovie;
               return (
-                <div
+                <Link
+                  to={`/${id}`}
                   className="bg-card-bg-color h-[355px] w-48 overflow-y-hidden rounded-lg"
                   key={id}
                 >
@@ -168,7 +169,7 @@ function MovieDetails() {
                     </h2>
                     <p>{release_date.split("-")[0]}</p>
                   </section>
-                </div>
+                </Link>
               );
             })
           )}

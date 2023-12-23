@@ -47,27 +47,29 @@ function Login() {
       dispatch({ type: "loading", payload: true });
       // panggil function untuk get request token API v3
       const token = await getRequestTokenV3();
-      console.log(token);
       // panggil function untuk get request token API v4
-      const account_id = await getRequestTokenV4();
-      console.log(account_id);
+      const reqTokenV4 = await getRequestTokenV4();
+      // console.log(account_id);
       // panggil function untuk get sessionId yang parameter-nya diisi dengan reques_token dan username serta password dari user yang sudah register ke TMDB
       const authSessionID = await authV3(token, state.username, state.password);
-      console.log(authSessionID);
       // memanggil global method yang sudah di-regiskan menggunakan cresteContext dan useContext
       const sessionObj = {
         sessionId: authSessionID.session_id,
         username: state.username,
+        reqTokenV4: reqTokenV4,
       };
       setSession({
         sessionId: authSessionID.session_id,
         username: state.username,
+        reqTokenV4: reqTokenV4,
       });
       sessionStorage.setItem("login", JSON.stringify(sessionObj));
-      dispatch({ type: "loading", payload: false });
+      sessionStorage.setItem("sessionIdV3", authSessionID.session_id);
+      sessionStorage.setItem("reqTokenV4", reqTokenV4);
       if (state.error === null) {
-        window.location.href = `https://www.themoviedb.org/auth/access?request_token=${account_id}`;
+        window.location.href = `https://www.themoviedb.org/auth/access?request_token=${reqTokenV4}`;
       }
+      dispatch({ type: "loading", payload: false });
     } catch (error) {
       dispatch({ type: "error", payload: error });
     }

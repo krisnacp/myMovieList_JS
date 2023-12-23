@@ -5,22 +5,19 @@ import { createContext, useState } from "react";
 const AuthContext = createContext({
   sessionId: null,
   username: null,
-  isLoggedIn: false,
+  reqTokenV4: null,
 });
-
-// UserAuth.propTypes = {
-//   children: PropTypes.node.isRequired,
-// };
 
 // membuat react jsx/tsx.element yang nantinya akan digunakan menerima data dari component lain atau dari luar (API)
 function UserAuthProvider({ children }) {
   const [session, setSession] = useState(() => {
-    JSON.parse(sessionStorage.getItem("login")) || null;
+    return JSON.parse(sessionStorage.getItem("login")) || null;
   });
   const value = {
     session,
     setSession,
   };
+  // console.log(session);
 
   return <AuthContext.Provider value={value}>{children}</AuthContext.Provider>;
 }

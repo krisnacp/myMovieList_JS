@@ -3,7 +3,7 @@ import {
   API_ACCESS_TOKEN,
   //   BASE_API_URL_V4,
   REQUEST_TOKEN_URL_V4,
-  //   ACCESS_TOKEN_URL_V4,
+  ACCESS_TOKEN_URL_V4,
   //   BASE_API_URL_V3,
   REQUEST_TOKEN_URL_V3,
   LOGIN_URL_V3,
@@ -39,6 +39,14 @@ const optionsV3DELETE = {
   },
 };
 
+const optionsV4GET = {
+  method: "GET",
+  headers: {
+    accept: "application/json",
+    Authorization: `Bearer ${API_ACCESS_TOKEN}`,
+  },
+};
+
 const optionsV4POST = {
   method: "POST",
   headers: {
@@ -48,6 +56,7 @@ const optionsV4POST = {
   },
 };
 
+// TODO: function untuk request token API_v4
 const getRequestTokenV4 = async () => {
   const res = await fetch(REQUEST_TOKEN_URL_V4, {
     ...optionsV4POST,
@@ -55,8 +64,18 @@ const getRequestTokenV4 = async () => {
   });
   if (!res.ok) throw new Error("Error while fetching");
   const reqToken = await res.json();
-  console.log(reqToken);
   return reqToken.request_token;
+};
+
+// TODO: function untuk request token API_v4
+const authV4 = async (token) => {
+  const res = await fetch(ACCESS_TOKEN_URL_V4, {
+    ...optionsV4POST,
+    body: JSON.stringify({ request_token: token }),
+  });
+  if (!res.ok) throw new Error("Error while fetching");
+  const acc_id = await res.json();
+  return acc_id.account_id;
 };
 
 // TODO: function untuk request token API_v3
@@ -122,10 +141,12 @@ const getTopRatedMovies = async () => {
 
 export {
   optionsV3GET,
+  optionsV4GET,
   getRequestTokenV3,
   authV3,
   deleteSessionV3,
   getNowPlayingMovies,
   getTopRatedMovies,
   getRequestTokenV4,
+  authV4,
 };

@@ -16,6 +16,9 @@ function MainNav() {
       setLoading(true);
       const status = await deleteSessionV3(session.sessionId);
       if (status.success) setSession(null);
+      sessionStorage.removeItem("login");
+      sessionStorage.removeItem("reqTokenV4");
+      sessionStorage.removeItem("sessionIdV3");
       setLoading(false);
       navigate(`/login`);
     } catch (error) {
@@ -39,7 +42,7 @@ function MainNav() {
             <li>Watchlist</li>
           </Link>
         </button>
-        {session === null ? (
+        {!session ? (
           <Link to="login">
             <li>Login</li>
           </Link>
