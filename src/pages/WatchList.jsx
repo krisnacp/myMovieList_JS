@@ -1,42 +1,16 @@
-import { useState, useEffect, useContext } from "react";
-import { API_KEY, BASE_API_URL_V4 } from "../config/config";
-import { authV4, optionsV4GET } from "../api/API";
+import { useState, useContext } from "react";
 import { Link, useNavigate } from "react-router-dom";
-// import emptyHeart from "../assets/heart-empty-white.svg";
-// import filledHeart from "../assets/heart-filled-white.svg";
 import CardLoadingSkeleton from "../components/CardLoadingSkeleton";
 import { AuthContext } from "../context/AuthContext";
 
 function WatchList() {
   const { session } = useContext(AuthContext);
   const navigate = useNavigate();
-  const [watchList, setwatchList] = useState([]);
   const [loading, setLoading] = useState(false);
-  const reqTokenV4 = sessionStorage.getItem("reqTokenV4");
-  const sessionIdV3 = sessionStorage.getItem("sessionIdV3");
+  const watchlist = JSON.parse(localStorage.getItem("watchlist"));
 
   if (session === null)
     navigate("login?message=Youmustloginfirstbeforeaccessingwatchlist");
-
-  useEffect(() => {
-    // TODO: function untuk fetch data Top Rated
-    async function getWatchListMovies() {
-      try {
-        setLoading(true);
-        const accId = await authV4(reqTokenV4);
-        const res = await fetch(
-          `${BASE_API_URL_V4}account/${accId}/movie/watchlist?page=1&language=en-US?api_key=${API_KEY}`,
-          optionsV4GET,
-        );
-        const watchList = await res.json();
-        setwatchList(watchList.results);
-        setLoading(false);
-      } catch (error) {
-        console.log(error);
-      }
-    }
-    getWatchListMovies();
-  }, [reqTokenV4, sessionIdV3]);
 
   return (
     <main className="min-h-screen bg-black px-10 pt-10 text-white">
@@ -48,7 +22,7 @@ function WatchList() {
           ? Array.from({ length: 7 }, (_, i) => {
               return <CardLoadingSkeleton key={i} />;
             })
-          : watchList.map((nowPlayingMovie) => {
+          : watchlist.map((nowPlayingMovie) => {
               const { id, title, release_date, poster_path } = nowPlayingMovie;
               return (
                 <Link

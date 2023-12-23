@@ -1,7 +1,14 @@
-import { useEffect, useReducer } from "react";
-import { getNowPlayingMovies, getTopRatedMovies } from "../api/API";
+import { useEffect, useReducer, useContext } from "react";
+import {
+  getNowPlayingMovies,
+  getTopRatedMovies,
+  authV4,
+  optionsV4GET,
+} from "../api/API";
 import { Link } from "react-router-dom";
 import CardLoadingSkeleton from "../components/CardLoadingSkeleton";
+import { API_KEY, BASE_API_URL_V4 } from "../config/config";
+import { AuthContext } from "../context/AuthContext";
 
 // instasiasi inialt argument untuk useReducer
 const initialArg = {
@@ -34,6 +41,8 @@ function reducer(state, action) {
 
 function Home() {
   const [state, dispatch] = useReducer(reducer, initialArg);
+  const { session } = useContext(AuthContext);
+  const reqTokenV4 = sessionStorage.getItem("reqTokenV4");
 
   // TODO: fetch data dari function getNowPlayingMovies ./API
   useEffect(() => {
@@ -69,7 +78,48 @@ function Home() {
     fetch();
   }, []);
 
-  // #111111
+  // TODO: penggunaan useEffect untuk fetch data favorite movie
+  useEffect(() => {
+    if (!session) return;
+    // TODO: function untuk fetch data Fav Movie
+    async function getWatchListMovies() {
+      try {
+        const accId = await authV4(reqTokenV4);
+        const res = await fetch(
+          `${BASE_API_URL_V4}account/${accId}/movie/favorites?page=1&language=en-US?api_key=${API_KEY}`,
+          optionsV4GET,
+        );
+        const favMovies = await res.json();
+        localStorage.setItem(
+          "favorite_movies",
+          JSON.stringify(favMovies.results),
+        );
+      } catch (error) {
+        console.log(error);
+      }
+    }
+    getWatchListMovies();
+  }, [session, reqTokenV4]);
+
+  // TODO: penggunaan useEffect untuk fetch data watch list movie
+  useEffect(() => {
+    if (!session) return;
+    // TODO: function untuk fetch data watch list movie
+    async function getWatchListMovies() {
+      try {
+        const accId = await authV4(reqTokenV4);
+        const res = await fetch(
+          `${BASE_API_URL_V4}account/${accId}/movie/watchlist?page=1&language=en-US?api_key=${API_KEY}`,
+          optionsV4GET,
+        );
+        const watchList = await res.json();
+        localStorage.setItem("watchlist", JSON.stringify(watchList.results));
+      } catch (error) {
+        console.log(error);
+      }
+    }
+    getWatchListMovies();
+  }, [session, reqTokenV4]);
 
   return (
     <main className="grid h-full grid-rows-1 gap-8 bg-black px-10 pb-10 text-white">

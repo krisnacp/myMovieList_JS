@@ -1,44 +1,16 @@
-import { useState, useEffect, useContext } from "react";
-import { API_KEY, BASE_API_URL_V4 } from "../config/config";
-import { authV4, optionsV4GET } from "../api/API";
+import { useState, useContext } from "react";
 import { Link, useNavigate } from "react-router-dom";
-// import emptyHeart from "../assets/heart-empty-white.svg";
-// import filledHeart from "../assets/heart-filled-white.svg";
 import CardLoadingSkeleton from "../components/CardLoadingSkeleton";
 import { AuthContext } from "../context/AuthContext";
 
 function Favorite() {
   const { session } = useContext(AuthContext);
   const navigate = useNavigate();
-  const [favMovies, setFavMovies] = useState([]);
   const [loading, setLoading] = useState(false);
-  const reqTokenV4 = sessionStorage.getItem("reqTokenV4");
-  const sessionIdV3 = sessionStorage.getItem("sessionIdV3");
-  console.log(favMovies);
+  const favorite_movies = JSON.parse(localStorage.getItem("favorite_movies"));
 
   if (session === null)
     navigate("login?message=Youmustloginfirstbeforeaccessingfavorite");
-
-  // TODO: penggunaan useEffect untuk fetch data favorite movie
-  useEffect(() => {
-    // TODO: function untuk fetch data Fav Movie
-    async function getWatchListMovies() {
-      try {
-        setLoading(true);
-        const accId = await authV4(reqTokenV4);
-        const res = await fetch(
-          `${BASE_API_URL_V4}account/${accId}/movie/favorites?page=1&language=en-US?api_key=${API_KEY}`,
-          optionsV4GET,
-        );
-        const favMovies = await res.json();
-        setFavMovies(favMovies.results);
-        setLoading(false);
-      } catch (error) {
-        console.log(error);
-      }
-    }
-    getWatchListMovies();
-  }, [reqTokenV4, sessionIdV3]);
 
   return (
     <main className="min-h-screen bg-black px-10 pt-10 text-white">
@@ -50,7 +22,7 @@ function Favorite() {
           ? Array.from({ length: 7 }, (_, i) => {
               return <CardLoadingSkeleton key={i} />;
             })
-          : favMovies.map((nowPlayingMovie) => {
+          : favorite_movies.map((nowPlayingMovie) => {
               const { id, title, release_date, poster_path } = nowPlayingMovie;
               return (
                 <Link
