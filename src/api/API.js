@@ -1,10 +1,10 @@
 import {
-  //   API_KEY,
+  API_KEY,
   API_ACCESS_TOKEN,
   //   BASE_API_URL_V4,
   REQUEST_TOKEN_URL_V4,
   ACCESS_TOKEN_URL_V4,
-  //   BASE_API_URL_V3,
+  BASE_API_URL_V3,
   REQUEST_TOKEN_URL_V3,
   LOGIN_URL_V3,
   SESSION_ID_URL_V3,
@@ -87,7 +87,7 @@ const getRequestTokenV3 = async () => {
   return reqToken.request_token;
 };
 
-// TODO: function untuk login dengan akun yang sudah terdaftar pada TMDB
+// TODO: function untuk login dengan akun yang sudah terdaftar pada TMDB API_v3
 const authV3 = async (requestToken, username, password) => {
   // menampung data yang di-pass malalui parameter menjadi bentuk object
   const bodyData = {
@@ -115,7 +115,7 @@ const authV3 = async (requestToken, username, password) => {
   }
 };
 
-// TODO: function untuk delete session_id method
+// TODO: function untuk delete session_id method API_v3
 const deleteSessionV3 = async (sessionId) => {
   const res = await fetch(DELETE_SESSION_ID_URL_V3, {
     ...optionsV3DELETE,
@@ -125,18 +125,50 @@ const deleteSessionV3 = async (sessionId) => {
   return delete_sessionId;
 };
 
-// TODO: function untuk fetch data Now Playing
+// TODO: function untuk fetch data Now Playing API_v3
 const getNowPlayingMovies = async () => {
   const res = await fetch(NOW_PLAYING_URL_V3, optionsV3GET);
   const nowPlaying = await res.json();
   return nowPlaying;
 };
 
-// TODO: function untuk fetch data Top Rated
+// TODO: function untuk fetch data Top Rated API_v3
 const getTopRatedMovies = async () => {
   const res = await fetch(TOP_RATED_URL_V3, optionsV3GET);
   const topRated = await res.json();
   return topRated;
+};
+
+// ?session_id=${sessionIdV3}
+// TODO: fucntion untuk add favorite movies
+const addFavMoviesV3 = async (addFavMovieObj, accId) => {
+  const res = await fetch(
+    `${BASE_API_URL_V3}account/${accId}/favorite?api_key=${API_KEY}`,
+    {
+      ...optionsV3POST,
+      body: JSON.stringify(addFavMovieObj),
+    },
+  );
+  const addFavMovies = await res.json();
+  return addFavMovies;
+};
+
+// {
+//   media_type: "movie",
+//   media_id: addWatchListObj.media_id,
+//   watchlist: addWatchListObj.watchlist,
+// }
+// TODO: fucntion untuk add favorite movies
+const addWatchListV3 = async (addWatchListObj, accId) => {
+  const res = await fetch(
+    `${BASE_API_URL_V3}account/${accId}/watchlist?api_key=${API_KEY}`,
+    {
+      ...optionsV3POST,
+      body: JSON.stringify(addWatchListObj),
+    },
+  );
+  const addWatchList = await res.json();
+  return addWatchList;
 };
 
 export {
@@ -145,6 +177,8 @@ export {
   getRequestTokenV3,
   authV3,
   deleteSessionV3,
+  addFavMoviesV3,
+  addWatchListV3,
   getNowPlayingMovies,
   getTopRatedMovies,
   getRequestTokenV4,

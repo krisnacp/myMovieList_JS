@@ -1,17 +1,30 @@
-import { useState, useEffect } from "react";
+import { useState, useEffect, useContext } from "react";
 import { API_KEY, BASE_API_URL_V3 } from "../config/config";
-import { optionsV3GET } from "../api/API";
-import { useParams, Link } from "react-router-dom";
+import {
+  optionsV3GET,
+  addFavMoviesV3,
+  addWatchListV3,
+  authV4,
+} from "../api/API";
+import { useParams, Link, useNavigate } from "react-router-dom";
 import emptyHeart from "../assets/heart-empty-white.svg";
+import emptyBookmark from "../assets/bookmark-empty-white.svg";
 import filledHeart from "../assets/heart-filled-white.svg";
+import filledBookmark from "../assets/bookmark-filled-white.svg";
 import arrowLeft from "../assets/arrow-alt-left-black.svg";
 import CardLoadingSkeleton from "../components/CardLoadingSkeleton";
 import MovieDetailsLoadingSkeleton from "../components/MovieDetailsLoadingSkeleton";
+import { AuthContext } from "../context/AuthContext";
 
 function MovieDetails() {
+  const { session } = useContext(AuthContext);
+  const navigate = useNavigate();
+  const reqTokenV4 = sessionStorage.getItem("reqTokenV4");
   const [details, setdetails] = useState([]);
   const [recommMovies, setRecommMovies] = useState([]);
   const [loading, setLoading] = useState(false);
+  const [favorite, setFavorite] = useState(false);
+  const [bookmark, setBookmark] = useState(false);
   const { movie_id } = useParams();
   const {
     backdrop_path,
@@ -23,11 +36,12 @@ function MovieDetails() {
     tagline,
     title,
     vote_average,
+    id,
   } = details;
-  //   const dateSlice = release_date?.split("-");
-  //   console.log(movie_Id);
-  //   console.log(recommMovies);
+  const dateSlice = release_date?.split("-");
+  console.log(details);
 
+  // TODO: penggunaan effect untuk fetch details movie berdasarkan id details movie
   useEffect(() => {
     // TODO: function untuk fetch data Top Rated
     async function getTopRatedMovies(movie_id) {
@@ -49,7 +63,7 @@ function MovieDetails() {
 
   // TODO: penggunaan effect untuk fetch recomendation movies berdasarkan id details movie
   useEffect(() => {
-    // TODO: function untuk fetch data Top Rated
+    // TODO: function untuk fetch data Recommendations
     async function getTopRatedMovies(movie_id) {
       try {
         setLoading(true);
@@ -66,6 +80,42 @@ function MovieDetails() {
     }
     getTopRatedMovies(movie_id);
   }, [movie_id]);
+
+  // TODO: function untuk handle click add to favorite movies
+  async function addFavoriteMovies(event, movie_id) {
+    event.preventDefault();
+    if (session === null)
+      navigate(
+        "/login?message=Youmustloginfirstbeforeaddingmovietofavoritelist",
+      );
+    const accId = await authV4(reqTokenV4);
+    setFavorite((prev) => !prev);
+    const addFavObj = {
+      media_type: "movie",
+      media_id: movie_id,
+      favorite: favorite ? false : true,
+    };
+    console.log(addFavObj);
+    addFavMoviesV3(addFavObj, accId);
+  }
+
+  // TODO: function untuk handle click add to watch list
+  async function addWatchList(event, movie_id) {
+    event.preventDefault();
+    if (session === null)
+      navigate(
+        "/login?message=Youmustloginfirstbeforeaddingmovietofavoritelist",
+      );
+    const accId = await authV4(reqTokenV4);
+    setBookmark((prev) => !prev);
+    const addWatchObj = {
+      media_type: "movie",
+      media_id: movie_id,
+      watchlist: bookmark ? false : true,
+    };
+    console.log(addWatchObj);
+    addWatchListV3(addWatchObj, accId);
+  }
 
   return (
     <section className=" min-h-screen bg-black text-white">
@@ -98,32 +148,53 @@ function MovieDetails() {
             />
             {/* movie details section */}
             <section className="text-[14px]">
+              {/* title section */}
               <h1 className="mb-3 text-[32px] font-bold">
-                {title}{" "}
-                <span className=" font-normal">
-                  ({release_date?.split("-")[0]})
-                </span>
+                {title} <span className=" font-normal">({dateSlice[0]})</span>
               </h1>
-              <ul className="mb-3 flex list-disc gap-8">
+              {/* release_date, genre, runtime section */}
+              <ul className="mb-3 flex list-disc gap-8 ">
                 <li className="list-none">
-                  {release_date?.split("-")[0]}/{release_date?.split("-")[1]}/
-                  {release_date?.split("-")[2]}
+                  {dateSlice[0]}/{dateSlice[1]}/{dateSlice[2]}
                 </li>
-                <li>{genres.map((genre, i) => genre.name + `, ${i}`)}</li>
+                <li>
+                  {genres.map(
+                    (genre, i) =>
+                      genre.name + `${i + 1 < genres.length ? ", " : ""}`,
+                  )}
+                </li>
                 <li>
                   {Math.floor(runtime / 60)}h {runtime % 60}m
                 </li>
               </ul>
-              <div className="mb-3 flex gap-3">
+              {/* rate, vote, bookmark section */}
+              <div className="mb-3 flex items-center gap-1 border border-white">
                 <p>{vote_average}</p>
-                <div className="h-8 w-8">
-                  <img src={emptyHeart} alt="" />
+                {/* add favorite btn */}
+                <div
+                  onClick={(e) => addFavoriteMovies(e, id)}
+                  className="flex h-8 w-8 cursor-pointer items-center justify-center"
+                >
+                  {favorite ? (
+                    <img src={filledHeart} alt="heart icon" />
+                  ) : (
+                    <img src={emptyHeart} alt="heart icon" />
+                  )}
                 </div>
-                <div className="h-8 w-8">
-                  <img src={filledHeart} alt="" />
+                {/* add watchlist btn */}
+                <div
+                  onClick={(e) => addWatchList(e, id)}
+                  className="flex h-8 w-8 cursor-pointer items-center justify-center"
+                >
+                  {bookmark ? (
+                    <img src={filledBookmark} alt="bookmark icon" />
+                  ) : (
+                    <img src={emptyBookmark} alt="bookmark icon" />
+                  )}
                 </div>
               </div>
               <i>{tagline}</i>
+              {/* overview section */}
               <section className="mt-1">
                 <h3 className="font-bold">Overview</h3>
                 <p>{overview}</p>

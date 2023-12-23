@@ -14,12 +14,14 @@ function Favorite() {
   const [loading, setLoading] = useState(false);
   const reqTokenV4 = sessionStorage.getItem("reqTokenV4");
   const sessionIdV3 = sessionStorage.getItem("sessionIdV3");
+  console.log(favMovies);
 
   if (session === null)
     navigate("login?message=Youmustloginfirstbeforeaccessingfavorite");
 
+  // TODO: penggunaan useEffect untuk fetch data favorite movie
   useEffect(() => {
-    // TODO: function untuk fetch data Top Rated
+    // TODO: function untuk fetch data Fav Movie
     async function getWatchListMovies() {
       try {
         setLoading(true);
