@@ -23,6 +23,8 @@ function MainNav() {
       sessionStorage.removeItem("login");
       sessionStorage.removeItem("reqTokenV4");
       sessionStorage.removeItem("sessionIdV3");
+      localStorage.removeItem("favorite_movies");
+      localStorage.removeItem("watchlist");
       setLoading(false);
       navigate(`/login`);
     } catch (error) {
@@ -79,7 +81,7 @@ function MainNav() {
           <div className="spin"></div>
         ) : (
           <li
-            onClick={handleDeleteSessionId}
+            onClick={() => handleDeleteSessionId()}
             className="h-7 w-7 cursor-pointer"
           >
             <img src={logout} alt="logout logo svg" />

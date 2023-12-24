@@ -10,15 +10,17 @@ const AuthContext = createContext({
 
 // membuat react jsx/tsx.element yang nantinya akan digunakan menerima data dari component lain atau dari luar (API)
 function UserAuthProvider({ children }) {
-  const [session, setSession] = useState(() => {
-    return JSON.parse(sessionStorage.getItem("login")) || null;
-  });
-  const value = {
-    session,
-    setSession,
-  };
+  const [session, setSession] = useState(null);
+  // const value = {
+  //   session,
+  //   setSession,
+  // };
 
-  return <AuthContext.Provider value={value}>{children}</AuthContext.Provider>;
+  return (
+    <AuthContext.Provider value={{ session, setSession }}>
+      {children}
+    </AuthContext.Provider>
+  );
 }
 
 export { AuthContext };
