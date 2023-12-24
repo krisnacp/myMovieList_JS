@@ -1,8 +1,6 @@
 import { useReducer, useContext } from "react";
 import { getRequestTokenV3, authV3, getRequestTokenV4 } from "../api/API";
 import { AuthContext } from "../context/AuthContext";
-// import { useNavigate } from "react-router-dom";
-// import useSession from "../hooks/useSession";
 
 // variable untuk initialArgumen pada useReducer
 const initialArg = {
@@ -35,8 +33,6 @@ function reducer(state, action) {
 function Login() {
   const [state, dispatch] = useReducer(reducer, initialArg);
   const { setSession } = useContext(AuthContext);
-  // [sessionStorage, setSessionStorage] = useSession("login");
-  // const navigate = useNavigate();
 
   // membuat function untuk handle generate new access token
   async function handleReqToken(e) {

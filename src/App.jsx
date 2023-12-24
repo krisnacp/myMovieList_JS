@@ -11,6 +11,7 @@ import WatchList from "./pages/WatchList";
 import Login from "./pages/Login";
 import MovieDetails from "./pages/MovieDetails.jsx";
 import UserAuthProvider from "./context/AuthContext.jsx";
+import SearchQueryContext from "./context/QueryContext.jsx";
 
 const router = createBrowserRouter(
   createRoutesFromElements(
@@ -28,7 +29,9 @@ function App() {
   return (
     <>
       <UserAuthProvider>
+        {/* <SearchQueryContext> */}
         <RouterProvider router={router} />
+        {/* </SearchQueryContext> */}
       </UserAuthProvider>
     </>
   );

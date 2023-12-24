@@ -1,16 +1,20 @@
 import { Link, useNavigate } from "react-router-dom";
-import { useContext } from "react";
+import { useContext, useState, useEffect } from "react";
 import { AuthContext } from "../context/AuthContext";
-import { deleteSessionV3 } from "../api/API";
+import { QueryContext } from "../context/QueryContext";
+import { deleteSessionV3, searchV3 } from "../api/API";
 import logout from "../assets/log-out-white.svg";
-import { useState } from "react";
 
 function MainNav() {
   const [loading, setLoading] = useState(false);
   const { session, setSession } = useContext(AuthContext);
+  const { setData } = useContext(QueryContext);
   const navigate = useNavigate();
+  const [query, setQuery] = useState("");
+  // console.log(result);
+  // console.log(data);
 
-  // function handle delete session_id/logout
+  // TODO: function handle delete session_id/logout
   async function handleDeleteSessionId() {
     try {
       setLoading(true);
@@ -26,12 +30,37 @@ function MainNav() {
     }
   }
 
+  useEffect(() => {
+    async function dataFromQuery(querytext) {
+      const res = await searchV3(querytext);
+      setData(res);
+    }
+    dataFromQuery(query);
+  }, [query, setData]);
+
+  // TODO: function untuk handle change query search
+  function handleSearch(event) {
+    setQuery(event.target.value);
+  }
+
   return (
-    <nav className="font-roboto bg-nav-bg-color grid h-[100px] w-full grid-cols-2 px-10 text-white ">
-      {/* <button></button> */}
-      <Link className="self-center text-5xl font-bold" to="/">
+    <nav className="font-roboto bg-nav-bg-color grid h-[100px] w-full grid-cols-3 px-10 text-white ">
+      {/* Web title section */}
+      <Link className="self-center text-5xl font-bold " to="/">
         MYMOVIELIST
       </Link>
+      {/* search bar section */}
+      <div className="flex items-center justify-center text-white">
+        <input
+          type="text"
+          name="searchbar"
+          id="searchbar"
+          className="h-3/5 w-full border-b-2 border-white bg-transparent px-2 text-2xl font-medium text-white outline-none placeholder:text-white"
+          placeholder="Search movies here..."
+          onChange={(e) => handleSearch(e)}
+          value={query}
+        />
+      </div>
       {/* items-center grid-cols-[repeat(3,_minmax(0,_1fr)] grid-cols-3*/}
       <ul className="grid grid-cols-[repeat(3,_minmax(0,_min-content))] items-center justify-end gap-10 text-xl">
         <Link to="favorite">

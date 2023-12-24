@@ -17,7 +17,6 @@ function UserAuthProvider({ children }) {
     session,
     setSession,
   };
-  // console.log(session);
 
   return <AuthContext.Provider value={value}>{children}</AuthContext.Provider>;
 }

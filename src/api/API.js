@@ -11,6 +11,7 @@ import {
   DELETE_SESSION_ID_URL_V3,
   NOW_PLAYING_URL_V3,
   TOP_RATED_URL_V3,
+  SEARCH_BASE_URL,
 } from "../config/config";
 
 const optionsV3GET = {
@@ -139,7 +140,6 @@ const getTopRatedMovies = async () => {
   return topRated;
 };
 
-// ?session_id=${sessionIdV3}
 // TODO: fucntion untuk add favorite movies
 const addFavMoviesV3 = async (addFavMovieObj, accId) => {
   const res = await fetch(
@@ -153,11 +153,6 @@ const addFavMoviesV3 = async (addFavMovieObj, accId) => {
   return addFavMovies;
 };
 
-// {
-//   media_type: "movie",
-//   media_id: addWatchListObj.media_id,
-//   watchlist: addWatchListObj.watchlist,
-// }
 // TODO: fucntion untuk add favorite movies
 const addWatchListV3 = async (addWatchListObj, accId) => {
   const res = await fetch(
@@ -171,6 +166,13 @@ const addWatchListV3 = async (addWatchListObj, accId) => {
   return addWatchList;
 };
 
+// TODO: function fetch movies berdasasrkan search
+const searchV3 = async (query) => {
+  const res = await fetch(`${SEARCH_BASE_URL}${query}`, optionsV3GET);
+  const data = await res.json();
+  return data.results;
+};
+
 export {
   optionsV3GET,
   optionsV4GET,
@@ -179,6 +181,7 @@ export {
   deleteSessionV3,
   addFavMoviesV3,
   addWatchListV3,
+  searchV3,
   getNowPlayingMovies,
   getTopRatedMovies,
   getRequestTokenV4,

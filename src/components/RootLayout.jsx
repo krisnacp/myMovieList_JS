@@ -1,11 +1,14 @@
+import SearchQueryContext from "../context/QueryContext";
 import MainNav from "./MainNav";
 import { Outlet } from "react-router-dom";
 
 function RootLayout() {
   return (
     <>
-      <MainNav />
-      <Outlet />
+      <SearchQueryContext>
+        <MainNav />
+        <Outlet />
+      </SearchQueryContext>
     </>
   );
 }

@@ -22,9 +22,11 @@ function MovieDetails() {
   const reqTokenV4 = sessionStorage.getItem("reqTokenV4");
   const [details, setdetails] = useState([]);
   const [recommMovies, setRecommMovies] = useState([]);
+  const [fav, setFav] = useState(false);
+  const [watch, setWatch] = useState(false);
   const [loading, setLoading] = useState(false);
-  const [favorite, setFavorite] = useState(false);
-  const [bookmark, setBookmark] = useState(false);
+  const favoriteMovies = JSON.parse(localStorage.getItem("favorite_movies"));
+  const watchlist = JSON.parse(localStorage.getItem("watchlist"));
   const { movie_id } = useParams();
   const {
     backdrop_path,
@@ -39,7 +41,14 @@ function MovieDetails() {
     id,
   } = details;
   const dateSlice = release_date?.split("-");
-  console.log(details);
+  const filterFavMovie = favoriteMovies
+    .slice()
+    .filter((movie) => movie.id === id);
+  const filterWatchlist = watchlist.slice().filter((movie) => movie.id === id);
+  // console.log(filter);
+  // console.log(favoriteMovies);
+  // console.log(watchlist);
+  // console.log(fav);
 
   // TODO: penggunaan effect untuk fetch details movie berdasarkan id details movie
   useEffect(() => {
@@ -88,15 +97,40 @@ function MovieDetails() {
       navigate(
         "/login?message=Youmustloginfirstbeforeaddingmovietofavoritelist",
       );
+
+    let copyArr = favoriteMovies.slice();
+    const add = [...copyArr, details];
     const accId = await authV4(reqTokenV4);
-    setFavorite((prev) => !prev);
     const addFavObj = {
       media_type: "movie",
       media_id: movie_id,
-      favorite: favorite ? false : true,
+      favorite: true,
     };
     console.log(addFavObj);
     addFavMoviesV3(addFavObj, accId);
+    localStorage.setItem("favorite_movies", JSON.stringify(add));
+    setFav(true);
+  }
+
+  // TODO: function untuk handle click delete from favorite movies
+  async function deleteFavoriteMovies(event, movie_id) {
+    event.preventDefault();
+    if (session === null)
+      navigate(
+        "/login?message=Youmustloginfirstbeforeaddingmovietofavoritelist",
+      );
+
+    const copyArr = favoriteMovies.slice().filter((movie) => movie.id !== id);
+    const accId = await authV4(reqTokenV4);
+    const delFavObj = {
+      media_type: "movie",
+      media_id: movie_id,
+      favorite: false,
+    };
+    console.log(delFavObj);
+    addFavMoviesV3(delFavObj, accId);
+    localStorage.setItem("favorite_movies", JSON.stringify(copyArr));
+    setFav(false);
   }
 
   // TODO: function untuk handle click add to watch list
@@ -106,15 +140,40 @@ function MovieDetails() {
       navigate(
         "/login?message=Youmustloginfirstbeforeaddingmovietofavoritelist",
       );
+
+    let copyArr = watchlist.slice();
+    const add = [...copyArr, details];
     const accId = await authV4(reqTokenV4);
-    setBookmark((prev) => !prev);
     const addWatchObj = {
       media_type: "movie",
       media_id: movie_id,
-      watchlist: bookmark ? false : true,
+      watchlist: true,
     };
     console.log(addWatchObj);
     addWatchListV3(addWatchObj, accId);
+    localStorage.setItem("watchlist", JSON.stringify(add));
+    setWatch(true);
+  }
+
+  // TODO: function untuk handle click delete from watch list
+  async function deleteWatchList(event, movie_id) {
+    event.preventDefault();
+    if (session === null)
+      navigate(
+        "/login?message=Youmustloginfirstbeforeaddingmovietofavoritelist",
+      );
+
+    const copyArr = watchlist.slice().filter((movie) => movie.id !== id);
+    const accId = await authV4(reqTokenV4);
+    const addWatchObj = {
+      media_type: "movie",
+      media_id: movie_id,
+      watchlist: false,
+    };
+    console.log(addWatchObj);
+    addWatchListV3(addWatchObj, accId);
+    localStorage.setItem("watchlist", JSON.stringify(copyArr));
+    setWatch(false);
   }
 
   return (
@@ -168,30 +227,41 @@ function MovieDetails() {
                 </li>
               </ul>
               {/* rate, vote, bookmark section */}
-              <div className="mb-3 flex items-center gap-1 border border-white">
+              <div className="mb-3 flex items-center gap-1">
                 <p>{vote_average}</p>
                 {/* add favorite btn */}
-                <div
-                  onClick={(e) => addFavoriteMovies(e, id)}
-                  className="flex h-8 w-8 cursor-pointer items-center justify-center"
-                >
-                  {favorite ? (
-                    <img src={filledHeart} alt="heart icon" />
-                  ) : (
+                {filterFavMovie.length === 0 ? (
+                  <div
+                    onClick={(e) => addFavoriteMovies(e, id)}
+                    className="flex h-8 w-8 cursor-pointer items-center justify-center"
+                  >
                     <img src={emptyHeart} alt="heart icon" />
-                  )}
-                </div>
+                  </div>
+                ) : (
+                  <div
+                    onClick={(e) => deleteFavoriteMovies(e, id)}
+                    className="flex h-8 w-8 cursor-pointer items-center justify-center"
+                  >
+                    <img src={filledHeart} alt="heart icon" />
+                  </div>
+                )}
+
                 {/* add watchlist btn */}
-                <div
-                  onClick={(e) => addWatchList(e, id)}
-                  className="flex h-8 w-8 cursor-pointer items-center justify-center"
-                >
-                  {bookmark ? (
+                {filterWatchlist.length !== 0 ? (
+                  <div
+                    onClick={(e) => deleteWatchList(e, id)}
+                    className="flex h-8 w-8 cursor-pointer items-center justify-center"
+                  >
                     <img src={filledBookmark} alt="bookmark icon" />
-                  ) : (
+                  </div>
+                ) : (
+                  <div
+                    onClick={(e) => addWatchList(e, id)}
+                    className="flex h-8 w-8 cursor-pointer items-center justify-center"
+                  >
                     <img src={emptyBookmark} alt="bookmark icon" />
-                  )}
-                </div>
+                  </div>
+                )}
               </div>
               <i>{tagline}</i>
               {/* overview section */}
