@@ -10,12 +10,9 @@
 # 😺 Features
 
 - Search movies: users can search for movies by title and can watch them easily
-- Genre-wise display: movies can be sorted by genre
-- Trending Movies: displays a section for trending movies
 - Upcoming movies: displays a section for upcoming movies
 - Movie Details: users can view detailed information about each movie
 - Bookmark Movies: users can bookmark their favorite movies for later viewing
-- Google Authentication: users can sign in using their Google account
 
 <hr/>
 
@@ -54,7 +51,7 @@ Open your code editor (such as VS Code) and navigate to the project directory. T
 npm install
 ```
 
-To install all dependencies that needed from npm
+To install all dependencies that needed from npm. Then:
 
 ```bash
 npm run dev
