@@ -11,8 +11,6 @@ function MainNav() {
   const { setData } = useContext(QueryContext);
   const navigate = useNavigate();
   const [query, setQuery] = useState("");
-  // console.log(result);
-  // console.log(data);
 
   // TODO: function handle delete session_id/logout
   async function handleDeleteSessionId() {
@@ -46,11 +44,11 @@ function MainNav() {
   }
 
   return (
-    <nav className="font-roboto bg-nav-bg-color grid h-[100px] w-full grid-cols-3 px-10 text-white ">
+    <nav className="grid h-[100px] w-full grid-cols-3 bg-nav-bg-color px-10 font-roboto text-white ">
       {/* Web title section */}
-      <Link className="self-center text-5xl font-bold " to="/">
-        MYMOVIELIST
-      </Link>
+      <div className="self-center text-5xl font-bold ">
+        <Link to="/">MYMOVIELIST</Link>
+      </div>
       {/* search bar section */}
       <div className="flex items-center justify-center text-white">
         <input

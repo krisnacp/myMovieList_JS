@@ -89,7 +89,7 @@ function Login() {
 
   return (
     <section className="grid h-[100dvh] grid-cols-1 bg-black py-8 text-white">
-      <div className="bg-card-bg-color mx-auto h-[600px] w-[500px] rounded-xl px-12 py-8 text-center">
+      <div className="mx-auto h-[600px] w-[500px] rounded-xl bg-card-bg-color px-12 py-8 text-center">
         <h1 className="text-4xl font-bold">Login</h1>
         <form className="mt-10 flex w-full flex-col gap-8" action="">
           {/* username section */}
