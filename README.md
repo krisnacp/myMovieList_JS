@@ -1,5 +1,3 @@
-- [@vitejs/plugin-react](https://github.com/vitejs/vite-plugin-react/blob/main/packages/plugin-react/README.md) uses [Babel](https://babeljs.io/) for Fast Refresh
-- [@vitejs/plugin-react-swc](https://github.com/vitejs/vite-plugin-react-swc) uses [SWC](https://swc.rs/) for Fast Refresh
   <!-- Title -->
   <h1 align="center">MyMovieList</h1>
   MyMovieList is a React-based movie website that allows users to search for movies by title, sort them by genre, view trending and upcoming movies, and bookmark their favorite movies. The website is designed to be user-friendly and visually appealing.
@@ -9,7 +7,7 @@
 
 <hr/>
 
-# 🍿 Features
+# 😺 Features
 
 - Search movies: users can search for movies by title and can watch them easily
 - Genre-wise display: movies can be sorted by genre
@@ -21,7 +19,7 @@
 
 <hr/>
 
-# 🍿 Tech Stack
+# 😺 Tech Stack
 
 MyMovieList is built using the following technologies:
 
@@ -32,7 +30,7 @@ MyMovieList is built using the following technologies:
 
 <hr/>
 
-# 🍿 How to Run the Website on Your System
+# 😺 How to Run the Website on Your System
 
 ## Step 1: Download and Extract the Code
 
@@ -44,7 +42,7 @@ Before starting the website, you will need to obtain the TMDB Movies API key and
 
 ### ▶️ Get TMDB API Key
 
-- Go to https://www.themoviedb.org/ and log in.
+- Go to https://www.themoviedb.org/ and log in. If you don't have the account, register first.
 - Click on your user profile picture in the navigation bar, and select "Settings".
 - In the settings, select "API" and generate an API key.
 
@@ -53,11 +51,17 @@ Before starting the website, you will need to obtain the TMDB Movies API key and
 Open your code editor (such as VS Code) and navigate to the project directory. Then, open a terminal and run the following command:
 
 ```bash
+npm install
+```
+
+To install all dependencies that needed from npm
+
+```bash
 npm run dev
 ```
 
-This will start the application. Open a web browser and navigate to http://localhost:3000 to access the website.
+This will start the application. Open a web browser and navigate to http://localhost:yourPortNumber to access the website.
 
-Note: Ensure that you have carefully added the TMDB API key and Firebase authentication configuration to your .env file. If the .env file is not working, add all the API keys and configuration manually.
+Note: Ensure that you have carefully added the TMDB API key to .env file. If the .env file is not working, add all the API keys and configuration manually.
 
 <hr/>
