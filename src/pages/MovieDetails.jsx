@@ -42,9 +42,9 @@ function MovieDetails() {
   } = details;
   const dateSlice = release_date?.split("-");
   const filterFavMovie = favoriteMovies
-    .slice()
+    ?.slice()
     .filter((movie) => movie.id === id);
-  const filterWatchlist = watchlist.slice().filter((movie) => movie.id === id);
+  const filterWatchlist = watchlist?.slice().filter((movie) => movie.id === id);
   // console.log(filter);
   // console.log(favoriteMovies);
   // console.log(watchlist);
@@ -230,7 +230,7 @@ function MovieDetails() {
               <div className="mb-3 flex items-center gap-1">
                 <p>{vote_average}</p>
                 {/* add favorite btn */}
-                {filterFavMovie.length === 0 ? (
+                {filterFavMovie?.length === 0 ? (
                   <div
                     onClick={(e) => addFavoriteMovies(e, id)}
                     className="flex h-8 w-8 cursor-pointer items-center justify-center"
@@ -247,7 +247,7 @@ function MovieDetails() {
                 )}
 
                 {/* add watchlist btn */}
-                {filterWatchlist.length !== 0 ? (
+                {filterWatchlist?.length !== 0 ? (
                   <div
                     onClick={(e) => deleteWatchList(e, id)}
                     className="flex h-8 w-8 cursor-pointer items-center justify-center"
@@ -296,7 +296,7 @@ function MovieDetails() {
               return (
                 <Link
                   to={`/${id}`}
-                  className="bg-card-bg-color h-[355px] w-48 overflow-y-hidden rounded-lg"
+                  className="h-[355px] w-48 overflow-y-hidden rounded-lg bg-card-bg-color"
                   key={id}
                 >
                   <img
@@ -304,7 +304,7 @@ function MovieDetails() {
                     alt={`movie poster ${title}`}
                     className="h-[289px] w-full "
                   />
-                  <section className="text-card-text-color mt-1 grid grid-rows-2 items-center px-4">
+                  <section className="mt-1 grid grid-rows-2 items-center px-4 text-card-text-color">
                     <h2 className="inline-block max-w-full overflow-x-hidden text-ellipsis whitespace-nowrap text-lg font-semibold">
                       {title}
                     </h2>
